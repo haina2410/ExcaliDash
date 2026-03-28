@@ -233,7 +233,13 @@ export const createAuthMiddleware = ({
     const payload = verifyToken(token);
 
     if (!payload) {
-      return next();
+      // Token present but invalid/expired — return 401 so the frontend
+      // interceptor can refresh the access token and retry.
+      res.status(401).json({
+        error: "Unauthorized",
+        message: "Invalid or expired token",
+      });
+      return;
     }
 
     try {
