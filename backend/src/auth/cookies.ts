@@ -5,7 +5,6 @@ import { config } from "../config";
 export const ACCESS_TOKEN_COOKIE_NAME = "excalidash-access-token";
 export const REFRESH_TOKEN_COOKIE_NAME = "excalidash-refresh-token";
 
-const DEFAULT_ACCESS_TTL_MS = 15 * 60 * 1000;
 const DEFAULT_REFRESH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 const parseDurationToMs = (value: string, fallbackMs: number): number => {
@@ -16,10 +15,6 @@ const parseDurationToMs = (value: string, fallbackMs: number): number => {
   return fallbackMs;
 };
 
-const ACCESS_TOKEN_COOKIE_MAX_AGE_MS = parseDurationToMs(
-  config.jwtAccessExpiresIn,
-  DEFAULT_ACCESS_TTL_MS
-);
 const REFRESH_TOKEN_COOKIE_MAX_AGE_MS = parseDurationToMs(
   config.jwtRefreshExpiresIn,
   DEFAULT_REFRESH_TTL_MS
@@ -59,9 +54,12 @@ export const setAuthCookies = (
   res: Response,
   tokens: { accessToken: string; refreshToken: string }
 ): void => {
+  // Access token cookie intentionally uses the refresh token lifetime so the
+  // browser always sends the (possibly expired) JWT.  The server detects the
+  // expired JWT and returns 401, letting the frontend refresh transparently.
   res.cookie(ACCESS_TOKEN_COOKIE_NAME, tokens.accessToken, {
     ...baseCookieOptions(req),
-    maxAge: ACCESS_TOKEN_COOKIE_MAX_AGE_MS,
+    maxAge: REFRESH_TOKEN_COOKIE_MAX_AGE_MS,
   });
   res.cookie(REFRESH_TOKEN_COOKIE_NAME, tokens.refreshToken, {
     ...baseCookieOptions(req),
@@ -76,7 +74,7 @@ export const setAccessTokenCookie = (
 ): void => {
   res.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
     ...baseCookieOptions(req),
-    maxAge: ACCESS_TOKEN_COOKIE_MAX_AGE_MS,
+    maxAge: REFRESH_TOKEN_COOKIE_MAX_AGE_MS,
   });
 };
 
