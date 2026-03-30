@@ -35,6 +35,8 @@ export default defineConfig(({ command }) => {
     },
     optimizeDeps: {
       esbuildOptions: {
+        target: "es2022",
+        treeShaking: true,
         define: processEnvDefines,
       },
     },

@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Download, Loader2, ChevronUp, ChevronDown, Share2 } from 'lucide-react';
 import clsx from 'clsx';
 import { Excalidraw, exportToSvg } from '@excalidraw/excalidraw';
+import '@excalidraw/excalidraw/index.css';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { Toaster, toast } from 'sonner';
