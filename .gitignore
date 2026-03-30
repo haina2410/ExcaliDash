@@ -44,6 +44,17 @@ frontend/dist/
 frontend/build/
 backend/dist/
 
+# Excalidraw fonts copied from node_modules during install/build
+frontend/public/Assistant/
+frontend/public/Cascadia/
+frontend/public/ComicShanns/
+frontend/public/Excalifont/
+frontend/public/Liberation/
+frontend/public/Lilita/
+frontend/public/Nunito/
+frontend/public/Virgil/
+frontend/public/Xiaolai/
+
 # E2E Testing
 e2e/node_modules/
 e2e/test-results/
