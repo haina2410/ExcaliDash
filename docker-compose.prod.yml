@@ -1,6 +1,6 @@
 services:
   backend:
-    image: zimengxiong/excalidash-backend:latest
+    image: haina2410/excalidash-backend:latest
     container_name: excalidash-backend
     environment:
       - FRONTEND_URL=${FRONTEND_URL}
@@ -40,7 +40,7 @@ services:
       retries: 3
 
   frontend:
-    image: zimengxiong/excalidash-frontend:latest
+    image: haina2410/excalidash-frontend:latest
     container_name: excalidash-frontend
     ports:
       - "6767:80"
