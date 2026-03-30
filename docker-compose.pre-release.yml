@@ -1,7 +1,7 @@
 services:
   backend:
     image: haina2410/excalidash-backend:dev
-    container_name: excalidash-backend
+    container_name: excalidash-backend-dev
     environment:
       - FRONTEND_URL=${FRONTEND_URL}
       - DATABASE_URL=file:/app/prisma/dev.db
@@ -40,7 +40,7 @@ services:
 
   frontend:
     image: haina2410/excalidash-frontend:dev
-    container_name: excalidash-frontend
+    container_name: excalidash-frontend-dev
     ports:
       - "6768:80"
     depends_on:
