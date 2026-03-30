@@ -7,7 +7,7 @@
     "dev": "vite --port 6767",
     "copy:excalidraw-fonts": "node scripts/copy-excalidraw-fonts.mjs",
     "build": "npm run copy:excalidraw-fonts && tsc -b && vite build",
-    "postinstall": "npm run copy:excalidraw-fonts",
+    "postinstall": "test -f scripts/copy-excalidraw-fonts.mjs && npm run copy:excalidraw-fonts || true",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
