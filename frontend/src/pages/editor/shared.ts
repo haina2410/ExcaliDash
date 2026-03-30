@@ -7,19 +7,26 @@ export interface ElementVersionInfo {
   contentSig: string;
 }
 
+/**
+ * Matches `CaptureUpdateAction.NEVER` from `@excalidraw/excalidraw` without
+ * importing the heavy library (which triggers DOM initialization and breaks
+ * in test environments). See Excalidraw 0.18.0 `updateScene` API.
+ */
+export const CAPTURE_UPDATE_NEVER = "NEVER" as const;
+
 type RemoteSceneUpdate =
   | {
       collaborators: Map<string, any>;
-      commitToHistory: false;
+      captureUpdate: typeof CAPTURE_UPDATE_NEVER;
     }
   | {
       elements: any[];
       files?: Record<string, any>;
-      commitToHistory: false;
+      captureUpdate: typeof CAPTURE_UPDATE_NEVER;
     }
   | {
       files: Record<string, any>;
-      commitToHistory: false;
+      captureUpdate: typeof CAPTURE_UPDATE_NEVER;
     };
 
 type BuildRemoteSceneUpdateInput = {
@@ -53,7 +60,7 @@ export const buildRemoteSceneUpdate = ({
     return {
       sceneUpdate: {
         collaborators,
-        commitToHistory: false,
+        captureUpdate: CAPTURE_UPDATE_NEVER,
       },
       mergedElements: null,
       nextFiles: lastSyncedFiles,
@@ -78,7 +85,7 @@ export const buildRemoteSceneUpdate = ({
       sceneUpdate: {
         elements: mergedElements,
         ...(shouldUpdateFiles ? { files: nextFiles } : {}),
-        commitToHistory: false,
+        captureUpdate: CAPTURE_UPDATE_NEVER,
       },
       mergedElements,
       nextFiles,
@@ -90,7 +97,7 @@ export const buildRemoteSceneUpdate = ({
     return {
       sceneUpdate: {
         files: nextFiles,
-        commitToHistory: false,
+        captureUpdate: CAPTURE_UPDATE_NEVER,
       },
       mergedElements: null,
       nextFiles,
