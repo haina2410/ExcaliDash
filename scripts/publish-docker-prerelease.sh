@@ -5,12 +5,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT_DIR"
 
-DOCKER_USERNAME="zimengxiong"
+DOCKER_USERNAME="haina2410"
 IMAGE_NAME="excalidash"
 VERSION=${1:-$(node -e "try { console.log(require('fs').readFileSync('VERSION', 'utf8').trim() + '-dev') } catch { console.log('pre-release') }")}
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-ALLOWED_BRANCH="pre-release"
+ALLOWED_BRANCH="nam/pre-release"
 if [ "$CURRENT_BRANCH" != "$ALLOWED_BRANCH" ]; then
   echo "ERROR: This script can only be run on the '$ALLOWED_BRANCH' branch!"
   echo "Current branch: '$CURRENT_BRANCH'"
