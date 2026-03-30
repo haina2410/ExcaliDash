@@ -147,6 +147,56 @@ describe("Link Sharing - Public By Drawing ID", () => {
     expect(anonPut.body?.name).toBe("Renamed By Anonymous");
   });
 
+  it("returns 401 for expired token GET on a private drawing", async () => {
+    const drawing = await createDrawing();
+
+    const expiredToken = jwt.sign(
+      { userId: ownerUser.id, email: ownerUser.email, type: "access" },
+      config.jwtSecret,
+      { expiresIn: "0s" }
+    );
+
+    const res = await request(app)
+      .get(`/drawings/${drawing.id}`)
+      .set("User-Agent", userAgent)
+      .set("Authorization", `Bearer ${expiredToken}`);
+    expect(res.status).toBe(401);
+    expect(res.body?.error).toBe("Unauthorized");
+  });
+
+  it("returns 401 for expired token PUT on a private drawing", async () => {
+    const drawing = await createDrawing();
+
+    const expiredToken = jwt.sign(
+      { userId: ownerUser.id, email: ownerUser.email, type: "access" },
+      config.jwtSecret,
+      { expiresIn: "0s" }
+    );
+
+    const anonAgent = request.agent(app);
+    const anonCsrfRes = await anonAgent
+      .get("/csrf-token")
+      .set("User-Agent", userAgent);
+    const anonCsrfHeaderName = anonCsrfRes.body.header;
+    const anonCsrfToken = anonCsrfRes.body.token;
+
+    const res = await anonAgent
+      .put(`/drawings/${drawing.id}`)
+      .set("User-Agent", userAgent)
+      .set("Authorization", `Bearer ${expiredToken}`)
+      .set(anonCsrfHeaderName, anonCsrfToken)
+      .send({ name: "Should Not Save" });
+    expect(res.status).toBe(401);
+    expect(res.body?.error).toBe("Unauthorized");
+  });
+
+  it("returns 404 for anonymous GET on a non-existent drawing", async () => {
+    const anonGet = await request(app)
+      .get("/drawings/00000000-0000-0000-0000-000000000000")
+      .set("User-Agent", userAgent);
+    expect(anonGet.status).toBe(404);
+  });
+
   it("revokes previous active link-share when creating a new one", async () => {
     const drawing = await createDrawing();
 
