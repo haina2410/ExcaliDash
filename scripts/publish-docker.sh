@@ -10,7 +10,7 @@ IMAGE_NAME="excalidash"
 VERSION=${1:-$(node -e "try { console.log(require('fs').readFileSync('VERSION', 'utf8').trim()) } catch { console.log('latest') }")}
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-ALLOWED_BRANCH="main"
+ALLOWED_BRANCH="nam/main"
 if [ "$CURRENT_BRANCH" != "$ALLOWED_BRANCH" ]; then
   echo "ERROR: This script can only be run on the '$ALLOWED_BRANCH' branch!"
   echo "Current branch: '$CURRENT_BRANCH'"
