@@ -4,6 +4,7 @@ import { io, type Socket } from "socket.io-client";
 import { toast } from "sonner";
 import type { UserIdentity } from "../../utils/identity";
 import { buildRemoteSceneUpdate } from "./shared";
+import { isDiscreteMouseWheel } from "./wheelInput";
 
 interface Peer extends UserIdentity {
   isActive: boolean;
@@ -299,6 +300,7 @@ export const useEditorCollaboration = ({
         !isEditorUi &&
         !event.ctrlKey &&
         !event.metaKey &&
+        isDiscreteMouseWheel(event) &&
         !(event as any)._isFakeZoom
       ) {
         event.preventDefault();
