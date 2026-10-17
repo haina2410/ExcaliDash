@@ -1,12 +1,13 @@
 services:
   backend:
-    image: zimengxiong/excalidash-backend:${EXCALIDASH_TAG:-latest}
+    image: haina2410/excalidash-backend:latest
     container_name: excalidash-backend
     # Run an init process (PID 1) that reaps zombies and forwards SIGTERM/SIGINT
     # to node so graceful shutdown (io.close / prisma.$disconnect) actually runs.
     init: true
     environment:
       - DATABASE_PROVIDER=sqlite
+      - FRONTEND_URL=${FRONTEND_URL}
       - DATABASE_URL=file:/app/prisma/dev.db
       - PORT=8000
       - NODE_ENV=production
@@ -52,7 +53,7 @@ services:
       retries: 3
 
   frontend:
-    image: zimengxiong/excalidash-frontend:${EXCALIDASH_TAG:-latest}
+    image: haina2410/excalidash-frontend:latest
     container_name: excalidash-frontend
     ports:
       - "6767:8080"
